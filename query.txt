@@ -1,0 +1,5 @@
+query: 1,type=Golden Retriever;
+query: 2,family=Canidae;
+purchase: {"purchaser": "John Doe", "pet-type": "bulldog", "store": 2, "pet-name": "Lazy", "purchase-id": "test123"};
+query: 1,genus=Canis;
+purchase: {"purchaser": "Jane Smith", "pet-type": "Abyssinian", "purchase-id": "test456"};

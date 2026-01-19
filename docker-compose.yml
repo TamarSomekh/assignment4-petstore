@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  
+  mongo-petstore:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_petstore_data:/data/db
+
+  
+  mongo-petorder:
+    image: mongo
+    ports:
+      - "27018:27017" 
+    volumes:
+      - mongo_petorder_data:/data/db
+
+  
+  pet-store1:
+    build: 
+      context: ./pet-store
+      args:
+        - STORE_ID=1
+    ports:
+      - "5001:8000"
+    environment:
+      - STORE_ID=1
+      - MONGODB_URI=mongodb://mongo-petstore:27017
+    depends_on:
+      - mongo-petstore
+
+  
+  pet-store2:
+    build: 
+      context: ./pet-store
+      args:
+        - STORE_ID=2
+    ports:
+      - "5002:8000"
+    environment:
+      - STORE_ID=2
+      - MONGODB_URI=mongodb://mongo-petstore:27017
+    depends_on:
+      - mongo-petstore
+
+  
+  pet-order1:
+    build: ./pet-order
+    ports:
+      - "5003:8080"
+    environment:
+      - MONGODB_URI=mongodb://mongo-petorder:27017/petorder
+      - PET_STORE1_URL=http://pet-store1:8000
+      - PET_STORE2_URL=http://pet-store2:8000
+    depends_on:
+      - mongo-petorder
+      - pet-store1
+      - pet-store2
+
+  
+  pet-order2:
+    build: ./pet-order
+    expose:
+      - "8080" 
+    environment:
+      - MONGODB_URI=mongodb://mongo-petorder:27017/petorder
+      - PET_STORE1_URL=http://pet-store1:8000
+      - PET_STORE2_URL=http://pet-store2:8000
+    depends_on:
+      - mongo-petorder
+      - pet-store1
+      - pet-store2
+
+
+volumes:
+  mongo_petstore_data:
+  mongo_petorder_data:
