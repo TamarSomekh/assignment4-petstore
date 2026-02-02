@@ -258,7 +258,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: pytest
           path: assn4_test_results.txt
         if: always()
       
@@ -469,7 +469,7 @@ jobs:
       - name: Upload response.txt
         uses: actions/upload-artifact@v4
         with:
-          name: query-response
+          name: response
           path: response.txt
         if: always()
       
